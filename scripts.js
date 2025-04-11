@@ -23,6 +23,8 @@
  *
  */
 
+import physicistObj from "./data/physicistDesc.js";
+
 const FRESH_PRINCE_URL =
   "https://upload.wikimedia.org/wikipedia/en/3/33/Fresh_Prince_S1_DVD.jpg";
 const CURB_POSTER_URL =
@@ -40,30 +42,42 @@ let titles = [
 // you should use more than just an array of strings to store it all.
 
 // This function adds cards the page to display the data in the array
-function showCards() {
+function createCards(dataObj) {
   const cardContainer = document.getElementById("card-container");
   cardContainer.innerHTML = "";
   const templateCard = document.querySelector(".card");
 
-  for (let i = 0; i < titles.length; i++) {
-    let title = titles[i];
+  const physicistNames = Object.keys(dataObj);
 
-    // This part of the code doesn't scale very well! After you add your
-    // own data, you'll need to do something totally different here.
-    let imageURL = "";
-    if (i == 0) {
-      imageURL = FRESH_PRINCE_URL;
-    } else if (i == 1) {
-      imageURL = CURB_POSTER_URL;
-    } else if (i == 2) {
-      imageURL = EAST_LOS_HIGH_POSTER_URL;
-    }
+  console.log(physicistNames);
+
+  for (let i = 0; i < physicistNames.length; i++) {
+
+    const physicist = physicistNames[i];
+
+    const physicistInfo = dataObj[physicist];
+
+    const mostPopularContribution = physicistInfo["Most Popular Contribution"];
+
+    const papersPublished = physicistInfo["Papers Published"];
+
+    const image = physicistInfo["Image"];
+    // "Lifespan": "",
+    //     "Most Popular Contribution": "",
+    //     "Papers Published": "",
+    //     "Image": "https://openlysecular.org/wp-content/uploads/2014/09/mariecurie2pic.jpg"
+
+
+
+
 
     const nextCard = templateCard.cloneNode(true); // Copy the template card
-    editCardContent(nextCard, title, imageURL); // Edit title and image
+    editCardContent(nextCard, physicist, image); // Edit title and image
     cardContainer.appendChild(nextCard); // Add new card to the container
   }
 }
+
+
 
 function editCardContent(card, newTitle, newImageURL) {
   card.style.display = "block";
@@ -82,7 +96,9 @@ function editCardContent(card, newTitle, newImageURL) {
 }
 
 // This calls the addCards() function when the page is first loaded
-document.addEventListener("DOMContentLoaded", showCards);
+document.addEventListener("DOMContentLoaded", () => {
+  createCards(physicistObj);
+});
 
 function quoteAlert() {
   console.log("Button Clicked!");
