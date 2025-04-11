@@ -74,8 +74,6 @@ body {
 }
 
 .card-content:hover{
-  /* transform: skewX(-2deg) skewY(-2deg) scaleX(1.05); */
-  z-index: 1;
   cursor: pointer;
   box-shadow: 0 0 20px var(--main-color-semiTransparent);
 }
@@ -83,6 +81,11 @@ body {
 .card {
   padding: 20px;
 }
+
+/* .card:hover {
+  transform: skewX(-2deg) skewY(-2deg) scaleX(1.05);
+  z-index: 1;
+} */
 
 .dataList {
   list-style-type: none;
