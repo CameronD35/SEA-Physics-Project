@@ -25,50 +25,37 @@
 
 import physicistObj from "./data/physicistDesc.js";
 
-const FRESH_PRINCE_URL =
-  "https://upload.wikimedia.org/wikipedia/en/3/33/Fresh_Prince_S1_DVD.jpg";
-const CURB_POSTER_URL =
-  "https://m.media-amazon.com/images/M/MV5BZDY1ZGM4OGItMWMyNS00MDAyLWE2Y2MtZTFhMTU0MGI5ZDFlXkEyXkFqcGdeQXVyMDc5ODIzMw@@._V1_FMjpg_UX1000_.jpg";
-const EAST_LOS_HIGH_POSTER_URL =
-  "https://static.wikia.nocookie.net/hulu/images/6/64/East_Los_High.jpg";
-
-// This is an array of strings (TV show titles)
-let titles = [
-  "Fresh Prince of Bel Air",
-  "Curb Your Enthusiasm",
-  "East Los High",
-];
 // Your final submission should have much more data than this, and
 // you should use more than just an array of strings to store it all.
 
 // This function adds cards the page to display the data in the array
 function createCards(dataObj) {
   const cardContainer = document.getElementById("card-container");
-  cardContainer.innerHTML = "";
   const templateCard = document.querySelector(".card");
+  cardContainer.innerHTML = "";
 
   const physicistNames = Object.keys(dataObj);
 
   console.log(physicistNames);
 
   for (let i = 0; i < physicistNames.length; i++) {
-
+    // name of physicist
     const physicist = physicistNames[i];
 
+    // The object associated with each physicist's name
     const physicistInfo = dataObj[physicist];
 
+    // Lifespan of physicist (birth to death)
+    const lifespan = physicistInfo["Lifespan"]
+
+    // Most popular piece of work
     const mostPopularContribution = physicistInfo["Most Popular Contribution"];
 
+    // Number of papers published throughout lifttime
     const papersPublished = physicistInfo["Papers Published"];
 
+    // Picture of physicist
     const image = physicistInfo["Image"];
-    // "Lifespan": "",
-    //     "Most Popular Contribution": "",
-    //     "Papers Published": "",
-    //     "Image": "https://openlysecular.org/wp-content/uploads/2014/09/mariecurie2pic.jpg"
-
-
-
 
 
     const nextCard = templateCard.cloneNode(true); // Copy the template card
@@ -80,7 +67,7 @@ function createCards(dataObj) {
 
 
 function editCardContent(card, newTitle, newImageURL) {
-  card.style.display = "block";
+  card.style.display = "flex";
 
   const cardHeader = card.querySelector("h2");
   cardHeader.textContent = newTitle;

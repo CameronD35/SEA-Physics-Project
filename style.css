@@ -1,54 +1,142 @@
+* {
+  font-family: "scale-variable";
+  transition-duration: 0.4s;
+}
+
+:root {
+  --main-color: rgb(238, 238, 238);
+  --secondary-color: rgb(17, 17, 17);
+  --tertiary-color: rgb(0, 0, 0);
+
+  --main-color-semiTransparent: rgba(238, 238, 238, 0.7);
+  --secondary-color-semiTransparent: rgba(17, 17, 17, 0.7);
+  --tertiary-color-semiTransparent: rgba(0, 0, 0, 0.7);
+
+  --main-color-Transparent: rgba(238, 238, 238, 0.4);
+  --secondary-color-Transparent: rgba(17, 17, 17, 0.4);
+  --tertiary-color-Transparent: rgba(0, 0, 0, 0.4);
+}
+
 html,
 body {
   margin: 0;
   padding: 0;
+
+  background-color: var(--secondary-color);
 }
 
 .main-header {
-  background-color: rgba(0, 0, 0, 0.3);
-  padding-bottom: 10px;
+  position: sticky;
+  height: fit-content;
+  padding: 10px 0;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero {
+  width: 100vw;
+  height: 80vh;
 }
 
 .title {
   text-align: center;
   margin: 0;
-  font-size: 8em;
-  font-family: "Helvetica";
-  font-weight: normal;
-  color: white;
+  font-size: 2em;
+  font-weight: 900;
+  color: var(--main-color);
 }
 
 #card-container {
   display: flex;
   justify-content: center;
+  align-items: center;
   margin: 20px;
+  height: 100%;
 }
 
 .card {
-  width: 300px;
-  border: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-content{
+  width: 250px;
+  height: fit-content;
+  border: 1px solid var(--main-color);
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin: 5px;
+  margin: 20px;
+  background-color: var(--secondary-color);
+}
+
+.card-content:hover{
+  /* transform: skewX(-2deg) skewY(-2deg) scaleX(1.05); */
+  z-index: 1;
+  cursor: pointer;
+  box-shadow: 0 0 20px var(--main-color-semiTransparent);
 }
 
 .card-content {
   padding: 20px;
-  font-family: "Verdana";
-  color: #777;
 }
 
-.card-content h2 {
+.dataTitle {
+  color: var(--main-color);
   margin-top: 0;
   font-size: 20px;
+  font-weight: 500;
 }
 
-.card img {
+.dataPoint {
+  color: var(--main-color);
+  margin-top: 0;
+  font-size: 20px;
+  font-weight: 300;
+}
+
+.name {
+  color: var(--main-color);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.imgContainer {
   width: 100%;
-  height: auto;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.physicistImg {
+  width: 90%;
+  height: 90%;
+  object-fit: cover;
+  border-radius: 6px;
+  transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.physicistImg:hover {
+  width: 100%;
+  height: 100%;
+}
+
+.cardDropdown {
+  color: white;
+  width: calc(100% - 40px);
+  border-radius: 0 0 5px 5px;
+  background-color: var(--main-color);
+  color: var(--secondary-color);
 }
 
 .footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
   display: flex;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.3);
