@@ -23,19 +23,19 @@
             <ul class="dataList">
               <li class="dataTitle">
                 Lifespan:
-                <span class="dataPoint">
+                <span class="dataPoint lifespan">
                   5
                 </span>
               </li>
               <li class="dataTitle">
-                Most Popular Contribution:
-                <span class="dataPoint">
+                Popular Contribution:
+                <span class="dataPoint popContribution">
                   6
                 </span>
               </li>
               <li class="dataTitle">
                 Papers Published:
-                <span class="dataPoint">
+                <span class="dataPoint papersPublished">
                   7
                 </span>
               </li>
@@ -54,8 +54,11 @@
       </div>
     </div>
     <div class="footer">
-      <button onclick="quoteAlert();">Get A Quote!</button>
-      <button onclick="removeLastCard();">Remove A Card!</button>
+      <div class="collectionContainer">
+        <div class="collectedText">
+          Collected: <span class="numberOfCollected" data-collected="0">0</span>/5
+        </div>
+      </div>
     </div>
     <div class="background">
       <span class="backgroundText">

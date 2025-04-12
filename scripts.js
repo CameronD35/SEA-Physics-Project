@@ -41,8 +41,6 @@ function createCards(dataObj) {
   console.log(physicistNames);
 
   for (let i = 0; i < 3; i++) {
-    
-
 
     // name of physicist
     const physicist = physicistNames[i];
@@ -53,37 +51,73 @@ function createCards(dataObj) {
     const nextCard = templateCard.cloneNode(true);
     editCardContent(nextCard, physicist, physicistInfo); // Edit title and image
     cardContainer.appendChild(nextCard); // Add new card to the container
+
   }
 }
 
 
 
 function editCardContent(card, newTitle, physicistInfo) {
-  
+
+  // Change from display: none to display: flex
+  card.style.display = "flex";
+
+  // Indicate that the card is currently being displayed
+  physicistInfo["Visible"] = "true";
+
+  // Name of physicist (which is the header)
   card.physicist = newTitle;
   const cardHeader = card.querySelector("h2");
   cardHeader.textContent = newTitle;
 
+
   // Lifespan of physicist (birth to death)
+  const lifespanText = card.querySelector(".lifespan");
   const lifespan = physicistInfo["Lifespan"];
+  lifespanText.textContent = lifespan;
+
 
   // Most popular piece of work
-  const mostPopularContribution = physicistInfo["Most Popular Contribution"];
+  const popContributionText = card.querySelector(".popContribution");
+  const popularContribution = physicistInfo["Popular Contribution"];
+
+  popContributionText.textContent = popularContribution;
+
 
   // Number of papers published throughout lifttime
+  const papersPublishedText = card.querySelector(".papersPublished");
   const papersPublished = physicistInfo["Papers Published"];
+
+  papersPublishedText.textContent = papersPublished;
+  
 
   // Picture of physicist
   const image = physicistInfo["Image"];
-
-
-  card.style.display = "flex";
-
-  //const publishedStat = card.querySelector();
-
   const cardImage = card.querySelector("img");
+
   cardImage.src = image;
   cardImage.alt = newTitle + " Poster";
+
+  // Logic for updating the amount of collected cards
+  const isCollected = physicistInfo["Collected"];
+
+  if (isCollected == "false") {
+
+    const numberOfCollectedDOM = document.querySelector(".numberOfCollected")
+    
+    let numberOfCollected = numberOfCollectedDOM.getAttribute("data-collected");
+
+    // Since we are "collecting" a card, we want to increment the number of collected  just before updating the data- attribute (hence the ++ before)
+    numberOfCollectedDOM.setAttribute("data-collected", ++numberOfCollected);
+
+    // Update the UI element with the new collected number
+    numberOfCollectedDOM.textContent = numberOfCollected;
+
+    // Update the data to indicate the card is already collected
+    physicistInfo["Collected"] = "true";
+
+  }
+
 
   // This shows the delete/replace options on each card on hover
   card.addEventListener("mouseenter", toggleCardOptions);
@@ -138,7 +172,6 @@ function toggleCardOptions(evt) {
     cardContent.style.borderRadius = "5px";
     changeBackgroundText("");
   }
-
 
 }
 
