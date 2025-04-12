@@ -127,12 +127,20 @@ function editCardContent(card, newTitle, physicistInfo) {
 
   const replaceButton = card.querySelector(".replaceButton");
 
+  // Event listener for replace card button
+  // The third argument, "{once: true}", prevents the editCardContent() function from 
+  // adding a duplicate event listener to the card
+  // once removes the event listener upon activation
   replaceButton.addEventListener("click", () => {
     console.log("I have been summoned!");
+
     replaceCard(card, physicistObj);
 
     physicistInfo["Visible"] = "false";
-  });
+
+    console.log(physicistObj);
+
+  }, {once: true});
 
 
   // This shows the delete/replace options on each card on hover
@@ -186,34 +194,50 @@ function toggleCardOptions(evt) {
 }
 
 function replaceCard(oldCard, dataObj) {
-  let visibility = "true";
 
   let randomPhysicistName;
   let newPhysicist;
 
-  while (visibility != "false") {
+  let physicistNames = Object.keys(dataObj);
+  // console.log(physicistNames);
 
-    const physicistNames = Object.keys(dataObj);
+  // Goes through and filters the array to see what physicists already have a card being displayed
+  // In order to prevent iterating through all the physicists, we cannot increment when we find a "visible" physicist
+  let i = 0;
 
-    // Math.random() returns numbers from 0 to 1, so we have to multiply by the length of the object of physicists
-    // Floor is to ensure we don't go above the indices of the object
-    const randomNumber = Math.floor(Math.random() * physicistNames.length);
+  while (i < physicistNames.length) {
 
-    // Grabs random physicist name from physicistNames array
-    randomPhysicistName = physicistNames[randomNumber];
+    const name = physicistNames[i];
 
-    // Takes random name and grabs info from dataObj
-    newPhysicist = dataObj[randomPhysicistName];
+    const physicistInfo = dataObj[name];
 
-    // 
-    visibility = newPhysicist["Visible"];
-    console.log(randomPhysicistName);
-  
+    console.log(i);
+
+    if (physicistInfo["Visible"] == "true") {
+
+      const physicistIndex = physicistNames.indexOf(name);
+
+      physicistNames.splice(physicistIndex, 1);
+
+    } else {
+
+      i++;
+    
+    }
   }
 
+  // Math.random() returns numbers from 0 to 1, so we have to multiply by the length of the object of physicists
+  // Floor is to ensure we don't go above the indices of the object
+  const randomNumber = Math.floor(Math.random() * physicistNames.length);
+
+  // Grabs random physicist name from the filtered physicistNames array
+  randomPhysicistName = physicistNames[randomNumber];
+
+  // Takes random name and grabs info from dataObj
+  newPhysicist = dataObj[randomPhysicistName];
+  
   // Effectively erases all the info on the old card and replaces it with the new physicist
   editCardContent(oldCard, randomPhysicistName, newPhysicist);
-
 
 }
 
