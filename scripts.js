@@ -26,6 +26,8 @@
 import physicistObj from "./data/physicistDesc.js";
 
 
+
+
 // Your final submission should have much more data than this, and
 // you should use more than just an array of strings to store it all.
 const templateCard = document.querySelector(".card"); // Copy the template card
@@ -36,7 +38,12 @@ function createCards(dataObj) {
   const templateCard = document.querySelector(".card");
   cardContainer.innerHTML = "";
 
+  // Grabs all the keys in the object and returns in array form
   const physicistNames = Object.keys(dataObj);
+
+  // Update the UI element in the bottom right corner with the proper amount of physicists in the data object
+  document.querySelector(".totalNumberOfCards").textContent = physicistNames.length;
+
 
   console.log(physicistNames);
 
@@ -118,6 +125,15 @@ function editCardContent(card, newTitle, physicistInfo) {
 
   }
 
+  const replaceButton = card.querySelector(".replaceButton");
+
+  replaceButton.addEventListener("click", () => {
+    console.log("I have been summoned!");
+    replaceCard(card, physicistObj);
+
+    physicistInfo["Visible"] = "false";
+  });
+
 
   // This shows the delete/replace options on each card on hover
   card.addEventListener("mouseenter", toggleCardOptions);
@@ -138,21 +154,15 @@ document.addEventListener("DOMContentLoaded", () => {
   createCards(physicistObj);
 });
 
-function quoteAlert() {
-  console.log("Button Clicked!");
-  alert(
-    "I guess I can kiss heaven goodbye, because it got to be a sin to look this good!"
-  );
-}
 
 function toggleCardOptions(evt) {
 
-  console.log(evt);
+  //console.log(evt);
 
   const eventType = evt.type;
 
   const card = evt.target;
-  console.log(card);
+  //console.log(card);
 
   const cardContent = card.querySelector(".card-content");
 
@@ -172,6 +182,38 @@ function toggleCardOptions(evt) {
     cardContent.style.borderRadius = "5px";
     changeBackgroundText("");
   }
+
+}
+
+function replaceCard(oldCard, dataObj) {
+  let visibility = "true";
+
+  let randomPhysicistName;
+  let newPhysicist;
+
+  while (visibility != "false") {
+
+    const physicistNames = Object.keys(dataObj);
+
+    // Math.random() returns numbers from 0 to 1, so we have to multiply by the length of the object of physicists
+    // Floor is to ensure we don't go above the indices of the object
+    const randomNumber = Math.floor(Math.random() * physicistNames.length);
+
+    // Grabs random physicist name from physicistNames array
+    randomPhysicistName = physicistNames[randomNumber];
+
+    // Takes random name and grabs info from dataObj
+    newPhysicist = dataObj[randomPhysicistName];
+
+    // 
+    visibility = newPhysicist["Visible"];
+    console.log(randomPhysicistName);
+  
+  }
+
+  // Effectively erases all the info on the old card and replaces it with the new physicist
+  editCardContent(oldCard, randomPhysicistName, newPhysicist);
+
 
 }
 
