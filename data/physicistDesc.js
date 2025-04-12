@@ -1,20 +1,20 @@
 let physicistObj = {
     "Albert Einstein": {
-        "Lifespan": "",
+        "Lifespan": "3/14/1879 - 4/18/1955",
         "Most Popular Contribution": "",
         "Papers Published": "",
         "Image": "https://argo.cz/wp-content/uploads/2020/03/Albert-Einstein1.jpg"
     },
 
     "Isaac Newton": {
-        "Lifespan": "",
+        "Lifespan": "1/4/1643 - 3/31/1727",
         "Most Popular Contribution": "",
         "Papers Published": "",
         "Image": "https://www.nmspacemuseum.org/wp-content/uploads/2019/03/sir-isaac-newton.jpg"
     },
 
     "Marie Curie": {
-        "Lifespan": "",
+        "Lifespan": "11/7/1867 - 7/4/1934",
         "Most Popular Contribution": "",
         "Papers Published": "",
         "Image": "https://openlysecular.org/wp-content/uploads/2014/09/mariecurie2pic.jpg"

@@ -25,8 +25,10 @@
 
 import physicistObj from "./data/physicistDesc.js";
 
+
 // Your final submission should have much more data than this, and
 // you should use more than just an array of strings to store it all.
+const templateCard = document.querySelector(".card"); // Copy the template card
 
 // This function adds cards the page to display the data in the array
 function createCards(dataObj) {
@@ -38,48 +40,63 @@ function createCards(dataObj) {
 
   console.log(physicistNames);
 
-  for (let i = 0; i < physicistNames.length; i++) {
+  for (let i = 0; i < 3; i++) {
+    
+
+
     // name of physicist
     const physicist = physicistNames[i];
 
     // The object associated with each physicist's name
     const physicistInfo = dataObj[physicist];
 
-    // Lifespan of physicist (birth to death)
-    const lifespan = physicistInfo["Lifespan"]
-
-    // Most popular piece of work
-    const mostPopularContribution = physicistInfo["Most Popular Contribution"];
-
-    // Number of papers published throughout lifttime
-    const papersPublished = physicistInfo["Papers Published"];
-
-    // Picture of physicist
-    const image = physicistInfo["Image"];
-
-
-    const nextCard = templateCard.cloneNode(true); // Copy the template card
-    editCardContent(nextCard, physicist, image); // Edit title and image
+    const nextCard = templateCard.cloneNode(true);
+    editCardContent(nextCard, physicist, physicistInfo); // Edit title and image
     cardContainer.appendChild(nextCard); // Add new card to the container
   }
 }
 
 
 
-function editCardContent(card, newTitle, newImageURL) {
-  card.style.display = "flex";
-
+function editCardContent(card, newTitle, physicistInfo) {
+  
+  card.physicist = newTitle;
   const cardHeader = card.querySelector("h2");
   cardHeader.textContent = newTitle;
 
+  // Lifespan of physicist (birth to death)
+  const lifespan = physicistInfo["Lifespan"];
+
+  // Most popular piece of work
+  const mostPopularContribution = physicistInfo["Most Popular Contribution"];
+
+  // Number of papers published throughout lifttime
+  const papersPublished = physicistInfo["Papers Published"];
+
+  // Picture of physicist
+  const image = physicistInfo["Image"];
+
+
+  card.style.display = "flex";
+
+  //const publishedStat = card.querySelector();
+
   const cardImage = card.querySelector("img");
-  cardImage.src = newImageURL;
+  cardImage.src = image;
   cardImage.alt = newTitle + " Poster";
+
+  // This shows the delete/replace options on each card on hover
+  card.addEventListener("mouseenter", toggleCardOptions);
+
+  // This hides the delete/replace options on each card on hover
+  card.addEventListener("mouseleave", toggleCardOptions);
+
+
 
   // You can use console.log to help you debug!
   // View the output by right clicking on your website,
   // select "Inspect", then click on the "Console" tab
-  console.log("new card:", newTitle, "- html: ", card);
+  //console.log("new card:", newTitle, "- html: ", card);
 }
 
 // This calls the addCards() function when the page is first loaded
@@ -92,6 +109,55 @@ function quoteAlert() {
   alert(
     "I guess I can kiss heaven goodbye, because it got to be a sin to look this good!"
   );
+}
+
+function toggleCardOptions(evt) {
+
+  console.log(evt);
+
+  const eventType = evt.type;
+
+  const card = evt.target;
+  console.log(card);
+
+  const cardContent = card.querySelector(".card-content");
+
+  const dropdown = card.querySelector(".cardDropdown");
+
+  if (eventType == "mouseenter") {
+    dropdown.setAttribute("data-toggle", "on");
+    dropdown.style.transform = "scaleY(1)";
+
+    cardContent.style.borderRadius = "5px 5px 0 0";
+    changeBackgroundText(card.physicist);
+
+  } else {
+    dropdown.setAttribute("data-toggle", "off");
+    dropdown.style.transform = "scaleY(0)";
+
+    cardContent.style.borderRadius = "5px";
+    changeBackgroundText("");
+  }
+
+
+}
+
+function changeBackgroundText(newName) {
+
+  const backgroundText = document.querySelector(".backgroundText");
+
+  const formattedName = newName.replace(" ", "<br>");
+
+  // Animation
+  backgroundText.style.opacity = 0;
+
+  setTimeout(() => {
+    backgroundText.innerHTML = formattedName;
+  }, 50)
+
+  setTimeout(() => {
+    backgroundText.style.opacity = 1;
+  }, 50)
 }
 
 function removeLastCard() {
