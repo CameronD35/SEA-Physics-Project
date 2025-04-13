@@ -109,7 +109,7 @@ function editCardContent(card, newTitle, physicistInfo) {
   const cardImage = card.querySelector("img");
 
   cardImage.src = image;
-  cardImage.alt = newTitle + " Poster";
+  cardImage.alt = newTitle + " Image";
 
   // Logic for updating the amount of collected cards
   const isCollected = physicistInfo["Collected"];
@@ -169,7 +169,7 @@ function editCardContent(card, newTitle, physicistInfo) {
   cardContent.addEventListener("click", () => {
     console.log("clicked in card");
 
-    displayDesc(physicistInfo);
+    displayDesc(physicistInfo, newTitle);
   })
 
 
@@ -373,28 +373,86 @@ function changeBackgroundText(newName) {
   }, 50)
 }
 
-function displayDesc(evt) {
-  showOverlay();
+function displayDesc(physicistInfo, name) {
+  const overlayContent = showOverlay();
+
+  const imgSection = overlayContent.querySelector(".imgSection");
+
+  const title = imgSection.querySelector(".physicistDescTitle");
+
+  title.textContent = name;
+
+  const img = imgSection.querySelector(".physicistDescImg");
+
+  img.src = physicistInfo["Image"];
+
+  const backgroundImg = imgSection.querySelector(".backgroundImg");
+
+  backgroundImg.src = physicistInfo["Image"];
+
+
+  const infoSection = overlayContent.querySelector(".infoSection");
+
+  // Lifespan of physicist (birth to death)
+  const lifespanText = infoSection.querySelector(".descLifespan");
+  const lifespan = physicistInfo["Lifespan"];
+  lifespanText.textContent = lifespan;
+
+
+  // Most popular piece of work
+  const popContributionText = infoSection.querySelector(".descPopContribution");
+  const popularContribution = physicistInfo["Popular Contribution"];
+
+  popContributionText.textContent = popularContribution;
+
+
+  // Number of papers published throughout lifttime
+  const papersPublishedText = infoSection.querySelector(".descPapersPublished");
+  const papersPublished = physicistInfo["Papers Published"];
+
+  papersPublishedText.textContent = papersPublished;
+
+  const descriptionSection = infoSection.querySelector(".physicistDesc");
+  const description = physicistInfo["Description"];
+
+  descriptionSection.textContent = description;
+
 }
 
 function showOverlay() {
   const overlay = document.querySelector(".overlay");
-
   const overlayProperties = overlay.style;
 
   overlayProperties.transform = "scaleX(1) scaleY(1)";
+  overlayProperties.pointerEvents = "all";
+
+  const heroProperties = document.querySelector(".hero").style;
+
+  heroProperties.filter = "blur(4px)";
 
   window.addEventListener("click", hideOverlay);
+
+  return overlay.querySelector(".overlayContent")
 }
 
 function hideOverlay(evt) {
   const overlay = document.querySelector(".overlay");
+  const overlayProperties = overlay.style;
+
+  const heroProperties = document.querySelector(".hero").style;
+
+
   const target = evt.target;
 
-  const containsOverlay = evt.target.contains(overlay);
+  const containsOverlay = target.contains(overlay);
+
+  console.log(target, containsOverlay);
 
   if (containsOverlay) {
-    overlayProperties.transform = "scaleX(1) scaleY(1)";
+    overlayProperties.transform = "scaleX(0) scaleY(0)";
+    overlayProperties.pointerEvents = "none";
+    
+    heroProperties.filter = "";
   }
 }
 
