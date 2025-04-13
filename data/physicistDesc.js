@@ -5,7 +5,7 @@ let physicistObj = {
         "Papers Published": "",
         "Image": "https://argo.cz/wp-content/uploads/2020/03/Albert-Einstein1.jpg",
         "Collected": "false",
-        "Visible": "true"
+        "Visible": "false"
     },
 
     "Isaac Newton": {
@@ -14,7 +14,7 @@ let physicistObj = {
         "Papers Published": "",
         "Image": "https://www.nmspacemuseum.org/wp-content/uploads/2019/03/sir-isaac-newton.jpg",
         "Collected": "false",
-        "Visible": "true"
+        "Visible": "false"
     },
 
     "Marie Curie": {
@@ -23,7 +23,7 @@ let physicistObj = {
         "Papers Published": "",
         "Image": "https://openlysecular.org/wp-content/uploads/2014/09/mariecurie2pic.jpg",
         "Collected": "false",
-        "Visible": "true"
+        "Visible": "false"
     },
 
     "Pierre Louis de Maupertuis": {

@@ -22,10 +22,9 @@
  *    with the string you added to the array, but a broken image.
  *
  */
-
 import physicistObj from "./data/physicistDesc.js";
 
-
+let maxNumOfCards = 3;
 
 
 // Your final submission should have much more data than this, and
@@ -33,7 +32,7 @@ import physicistObj from "./data/physicistDesc.js";
 const templateCard = document.querySelector(".card"); // Copy the template card
 
 // This function adds cards the page to display the data in the array
-function createCards(dataObj) {
+function createCards(dataObj, amount, startIndex=0) {
   const cardContainer = document.getElementById("card-container");
   const templateCard = document.querySelector(".card");
   cardContainer.innerHTML = "";
@@ -45,9 +44,9 @@ function createCards(dataObj) {
   document.querySelector(".totalNumberOfCards").textContent = physicistNames.length;
 
 
-  console.log(physicistNames);
+  //console.log(physicistNames);
 
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < amount; i++) {
 
     // name of physicist
     const physicist = physicistNames[i];
@@ -56,9 +55,12 @@ function createCards(dataObj) {
     const physicistInfo = dataObj[physicist];
 
     const nextCard = templateCard.cloneNode(true);
+    nextCard.id = `card${i + startIndex}`;
+
+    //console.log(physicistInfo)
     editCardContent(nextCard, physicist, physicistInfo); // Edit title and image
     cardContainer.appendChild(nextCard); // Add new card to the container
-
+    //replaceCard(nextCard, physicistObj)
   }
 }
 
@@ -66,11 +68,15 @@ function createCards(dataObj) {
 
 function editCardContent(card, newTitle, physicistInfo) {
 
+  //console.log(physicistInfo);
+
   // Change from display: none to display: flex
   card.style.display = "flex";
 
   // Indicate that the card is currently being displayed
   physicistInfo["Visible"] = "true";
+
+  //console.log(card);
 
   // Name of physicist (which is the header)
   card.physicist = newTitle;
@@ -112,6 +118,7 @@ function editCardContent(card, newTitle, physicistInfo) {
 
     const numberOfCollectedDOM = document.querySelector(".numberOfCollected")
     
+    // Gathers number of currently collected cards
     let numberOfCollected = numberOfCollectedDOM.getAttribute("data-collected");
 
     // Since we are "collecting" a card, we want to increment the number of collected  just before updating the data- attribute (hence the ++ before)
@@ -132,15 +139,39 @@ function editCardContent(card, newTitle, physicistInfo) {
   // adding a duplicate event listener to the card
   // once removes the event listener upon activation
   replaceButton.addEventListener("click", () => {
-    console.log("I have been summoned!");
+    //console.log("I have been summoned!");
 
     replaceCard(card, physicistObj);
 
     physicistInfo["Visible"] = "false";
 
-    console.log(physicistObj);
+    //console.log(physicistObj);
 
   }, {once: true});
+
+  const deleteButton = card.querySelector(".deleteButton");
+  console.log(`Added delete fn to ${card}`);
+  // comments
+  
+  deleteButton.addEventListener("click", () => {
+    console.log("I have been summoned!");
+
+    deleteCard(card);
+
+    physicistInfo["Visible"] = "false";
+
+    //console.log(physicistObj);
+
+  }, {once: true});
+
+  const cardContent = card.querySelector(".card-content");
+
+  cardContent.addEventListener("click", () => {
+    console.log("clicked in card");
+
+    displayDesc(physicistInfo);
+  })
+
 
 
   // This shows the delete/replace options on each card on hover
@@ -149,17 +180,11 @@ function editCardContent(card, newTitle, physicistInfo) {
   // This hides the delete/replace options on each card on hover
   card.addEventListener("mouseleave", toggleCardOptions);
 
-
-
-  // You can use console.log to help you debug!
-  // View the output by right clicking on your website,
-  // select "Inspect", then click on the "Console" tab
-  //console.log("new card:", newTitle, "- html: ", card);
 }
 
 // This calls the addCards() function when the page is first loaded
 document.addEventListener("DOMContentLoaded", () => {
-  createCards(physicistObj);
+  createCards(physicistObj, 3);
 });
 
 
@@ -211,7 +236,7 @@ function replaceCard(oldCard, dataObj) {
 
     const physicistInfo = dataObj[name];
 
-    console.log(i);
+    //console.log(i);
 
     if (physicistInfo["Visible"] == "true") {
 
@@ -235,9 +260,98 @@ function replaceCard(oldCard, dataObj) {
 
   // Takes random name and grabs info from dataObj
   newPhysicist = dataObj[randomPhysicistName];
+
+  //console.log(newPhysicist);
   
   // Effectively erases all the info on the old card and replaces it with the new physicist
   editCardContent(oldCard, randomPhysicistName, newPhysicist);
+
+}
+
+function deleteCard(card) {
+
+  const cardContainer = document.getElementById("card-container");
+  const numOfCards = cardContainer.children.length;
+
+  if (numOfCards < 2) {
+    console.log("You've broken physics!!!!");
+    return;
+  }
+  
+  toggleAddCardButton(false);
+
+
+  // This addresses an odd issue where the deleteCard() function seems to be called twice
+  if (cardContainer.contains(card)) {
+    cardContainer.removeChild(card);
+  }
+
+
+
+  //console.log(numOfCards);
+  //console.log(cardID);
+}
+
+function addCard(evt) {
+
+  const cardContainer = document.getElementById("card-container");
+  const templateCard = document.querySelector(".card");
+
+  let numOfCards = cardContainer.children.length;
+
+  // Grabs all the keys in the object and returns in array form
+  const physicistNames = Object.keys(physicistObj);
+
+
+  //console.log(physicistNames);
+
+
+  // name of physicist
+  const physicist = physicistNames[numOfCards];
+
+  // The object associated with each physicist's name
+  const physicistInfo = physicistObj[physicist];
+
+  //console.log(physicistInfo);
+
+  const nextCard = templateCard.cloneNode(true);
+  nextCard.id = `card${numOfCards}`;
+  editCardContent(nextCard, physicist, physicistInfo); // Edit title and image
+  cardContainer.appendChild(nextCard); // Add new card to the container
+  
+  replaceCard(nextCard, physicistObj);
+
+  // The number of cards prior to addition will also be the number appended to the new card
+  // since the card numbers start from 0 (whereas length starts from 1)
+  //console.log(cardContainer);
+  console.log(physicistObj);
+
+  if (++numOfCards >= 3) {
+    toggleAddCardButton(true);
+  }
+
+}
+
+function toggleAddCardButton(hideButton) {
+  const addCardButton = document.querySelector(".addCardButton");
+
+  const isVisible = addCardButton.getAttribute("data-visible");
+
+  if (isVisible == "false") {
+    addCardButton.style.transform = "scaleX(1) scaleY(1)";
+    addCardButton.addEventListener("click", addCard);
+
+    addCardButton.setAttribute("data-visible", "true");
+
+  } else if (hideButton) {
+    console.log("test");
+    addCardButton.style.transform = "scaleX(0) scaleY(0)";
+    addCardButton.removeEventListener("click", addCard);
+
+    addCardButton.setAttribute("data-visible", "false");
+  }
+
+  console.log("is this working tho?");
 
 }
 
@@ -257,6 +371,31 @@ function changeBackgroundText(newName) {
   setTimeout(() => {
     backgroundText.style.opacity = 1;
   }, 50)
+}
+
+function displayDesc(evt) {
+  showOverlay();
+}
+
+function showOverlay() {
+  const overlay = document.querySelector(".overlay");
+
+  const overlayProperties = overlay.style;
+
+  overlayProperties.transform = "scaleX(1) scaleY(1)";
+
+  window.addEventListener("click", hideOverlay);
+}
+
+function hideOverlay(evt) {
+  const overlay = document.querySelector(".overlay");
+  const target = evt.target;
+
+  const containsOverlay = evt.target.contains(overlay);
+
+  if (containsOverlay) {
+    overlayProperties.transform = "scaleX(1) scaleY(1)";
+  }
 }
 
 function removeLastCard() {

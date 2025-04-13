@@ -24,6 +24,8 @@ body {
   padding: 0;
 
   background-color: var(--secondary-color);
+
+  overflow: hidden;
 }
 
 .main-header {
@@ -39,6 +41,7 @@ body {
 .hero {
   width: 100vw;
   height: 80vh;
+  position: relative;
 }
 
 .title {
@@ -58,6 +61,8 @@ body {
   z-index: 1;
   position: relative;
 }
+
+/* INDIVIDUAL CARDS */
 
 .card {
   display: flex;
@@ -85,6 +90,7 @@ body {
   padding: 20px;
 }
 
+/* Hover animation */
 /* .card:hover {
   transform: skewX(-2deg) skewY(-2deg) scaleX(1.05);
   z-index: 1;
@@ -137,6 +143,7 @@ body {
   height: 100%;
 }
 
+/* CARD DROPDOWN */
 .cardDropdown {
   color: var(--main-color);
   width: 100%;
@@ -158,18 +165,34 @@ body {
   height: 75%;
 }
 
-.footer {
+/* Add Card UI Element */
+.addCardContainer {
   position: absolute;
-  bottom: 0;
   width: 100%;
+  height: 40px;
+  z-index: 2;
   display: flex;
-  justify-content: end;
-  background-color: unset;
+  justify-content: center;
+  align-items: center;
+  bottom: 0;
 }
 
+.addCardButton {
+  width: fit-content;
+  height: 100%;
+  border-radius: 10px;
+  border-style: none;
+  background-color: var(--main-color);
+  color: var(--secondary-color);
+  font-weight: 500;
+  font-size: 18px;
+  padding: 0 10px 0 10px;
+  transform: scaleX(0) scaleY(0);
+}
+
+/* Physicist name background */
 .background {
   position: absolute;
-  display: inline-block;
   width: 125vw;
   height: 125vh;
   transform: translateX(-12.5vw) translateY(-12.5vh);
@@ -182,16 +205,44 @@ body {
   align-content: center;
   text-align: center;
   z-index: 0;
-  overflow: hidden;
+  box-sizing:unset;
 }
 
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  background-color: unset;
+}
+
+/* Collected Cards UI element */
 .collectionContainer {
   padding-right: 20px;
   padding-bottom: 20px;
-  
 }
 
 .collectedText {
   color: var(--main-color);
   font-weight: 800;
+}
+
+
+/* OVERLAY */
+.overlay {
+  position: absolute;
+  font-size: 30px;
+  color: var(--main-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+
+  z-index: 2;
+  pointer-events: none;
+  transform: scaleX(0) scaleY(0);
+
+  
 }
