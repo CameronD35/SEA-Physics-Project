@@ -26,6 +26,8 @@ import physicistObj from "./data/physicistDesc.js";
 
 let maxNumOfCards = 3;
 
+const startTime = getTime();
+
 
 // Your final submission should have much more data than this, and
 // you should use more than just an array of strings to store it all.
@@ -459,4 +461,9 @@ function hideOverlay(evt) {
 function removeLastCard() {
   titles.pop(); // Remove last item in titles array
   showCards(); // Call showCards again to refresh
+}
+
+function getTime(){
+  let time = new Date(Date.now()).toTimeString().substring(0, 8);
+  return(time);
 }
