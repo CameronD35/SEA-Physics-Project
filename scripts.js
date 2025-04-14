@@ -35,12 +35,25 @@ const templateCard = document.querySelector(".card"); // Copy the template card
 
 // This calls the addCards() function when the page is first loaded
 document.addEventListener("DOMContentLoaded", () => {
-  createCards(physicistObj, 3);
+
+  const allCards = document.querySelector("#card-container").children;
+
+  createCards(physicistObj, maxNumOfCards);
+  
+  const windowWidth = window.innerWidth;
+  adjustToScreenSize(windowWidth);
+
+  const currentNumOfCards = allCards.length;
+  console.log(currentNumOfCards, allCards);
+
+  let blackHoleTime = document.querySelector(".blackHoleTime");
+  blackHoleTime.textContent = startTime;
+  
 });
 
 window.addEventListener("resize", (evt) => {
-  const windowWidth = evt.target.innerWidth
-  adjustToScreenSize(windowWidth)
+  const windowWidth = evt.target.innerWidth;
+  adjustToScreenSize(windowWidth);
 })
 
 // This function adds cards the page to display the data in the array
@@ -148,15 +161,13 @@ function editCardContent(card, newTitle, physicistInfo) {
   const replaceButton = card.querySelector(".replaceButton");
 
   // Event listener for replace card button
-  // The third argument, "{once: true}", prevents the editCardContent() function from 
-  // adding a duplicate event listener to the card
-  // once removes the event listener upon activation
+  // Only adds the replace function if it does not already exist on the card
   const cardhasReplaceFn = card.replaceFn;
 
   if (!cardhasReplaceFn) {
 
     replaceButton.addEventListener("click", () => {
-      console.log("I have been summoned!");
+      //console.log("I have been summoned!");
   
       replaceCard(card, physicistObj);
   
@@ -168,24 +179,17 @@ function editCardContent(card, newTitle, physicistInfo) {
     card.replaceFn = true;
 
   }
-  // replaceButton.addEventListener("click", () => {
-  //   console.log("I have been summoned!");
+  
 
-  //   replaceCard(card, physicistObj);
-
-  //   physicistInfo["Visible"] = "false";
-
-  //   //console.log(physicistObj);
-
-  // }, {once: true});
-
+  // Event listener for delete card button
+  // Only adds the delete function if it does not already exist on the card
   const deleteButton = card.querySelector(".deleteButton");
   const cardHasDeleteFn = card.deleteFn;
 
   if (!cardHasDeleteFn) {
 
     deleteButton.addEventListener("click", () => {
-      console.log("I have been summoned!");
+      //console.log("I have been summoned!");
   
       deleteCard(card);
   
@@ -342,14 +346,10 @@ function deleteCard(card) {
 
     if (finalDecision) {
 
-      let background = document.querySelector(".background");
+      secret();
 
-    background.style.backgroundImage = "url(AJourneyThroughPhysicsLogo.png)";
-
-      changeBackgroundText("");
-      createCards(physicistObj, 3);
     }
-    //showOverlay();
+    
   }
   
   console.log(numOfCards, maxNumOfCards);
@@ -425,22 +425,31 @@ function addCard(evt) {
 }
 
 function toggleAddCardButton(hideButton) {
+
   const addCardButton = document.querySelector(".addCardButton");
 
   const isVisible = addCardButton.getAttribute("data-visible");
 
+  // To prevent from hiding the button and then just revealing it afterwards (since it's visibility may already be "true")
+  // We return out of the function at the end if hideButton == true
+  if (hideButton) {
+
+    addCardButton.style.transform = "scaleX(0) scaleY(0)";
+    addCardButton.removeEventListener("click", addCard);
+
+    addCardButton.setAttribute("data-visible", "false");
+
+    return;
+
+  }
+
   if (isVisible == "false") {
+
     addCardButton.style.transform = "scaleX(1) scaleY(1)";
     addCardButton.addEventListener("click", addCard);
 
     addCardButton.setAttribute("data-visible", "true");
 
-  } else if (hideButton) {
-    console.log("test");
-    addCardButton.style.transform = "scaleX(0) scaleY(0)";
-    addCardButton.removeEventListener("click", addCard);
-
-    addCardButton.setAttribute("data-visible", "false");
   }
 
   console.log("is this working tho?");
@@ -592,11 +601,11 @@ function adjustToScreenSize(screenWidthPx) {
     let i = currentNumOfCards;
 
     if (currentNumOfCards < maxNumOfCards) {
-      
+      console.log("test");
       toggleAddCardButton(false);
 
     } else {
-
+      console.log("test2");
       toggleAddCardButton(true);
 
     }
@@ -621,4 +630,13 @@ function adjustToScreenSize(screenWidthPx) {
 function getTime(){
   let time = new Date(Date.now()).toTimeString().substring(0, 8);
   return(time);
+}
+
+function secret() {
+  let background = document.querySelector(".background");
+
+  background.style.backgroundImage = "url(AJourneyThroughPhysicsLogo.png)";
+
+  changeBackgroundText("");
+  createCards(physicistObj, 3);
 }
