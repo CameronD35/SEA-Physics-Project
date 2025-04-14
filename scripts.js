@@ -352,6 +352,10 @@ function deleteCard(card) {
 
       return;
 
+    } else {
+
+      return;
+      
     }
     
   }
