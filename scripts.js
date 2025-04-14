@@ -54,6 +54,7 @@ function createCards(dataObj, amount, startIndex=0) {
 
   // Update the UI element in the bottom right corner with the proper amount of physicists in the data object
   document.querySelector(".totalNumberOfCards").textContent = physicistNames.length;
+  document.querySelector(".numberOfCollected").textContent = amount;
 
 
   //console.log(physicistNames);
@@ -286,10 +287,48 @@ function deleteCard(card) {
   const cardContainer = document.getElementById("card-container");
   let numOfCards = cardContainer.children.length;
 
-  // if (numOfCards < 2) {
-  //   console.log("You've broken physics!!!!");
-  //   return;
-  // }
+  if (numOfCards < 2) {
+    console.log("test");
+
+    let finalDecision = false;
+    const firstDecision = confirm("Are you sure you want to do this?");
+
+    if (firstDecision) {
+
+      const secondDecision = confirm("Are you really sure?");
+
+      if (secondDecision) {
+
+        const thirdDecision = confirm("Are you really really sure? (This is your last chance)");
+
+        if (thirdDecision) {
+
+          const fourthDecision = confirm("Just kidding, but for real, this is your last chance.");
+
+          finalDecision = fourthDecision
+
+        } else {
+          return;
+        }
+      } else {
+        return;
+      }
+    } else {
+      return;
+    }
+
+
+    if (finalDecision) {
+
+      let background = document.querySelector(".background");
+
+    background.style.backgroundImage = "url(AJourneyThroughPhysicsLogo.png)";
+
+      changeBackgroundText("");
+      createCards(physicistObj, 3);
+    }
+    //showOverlay();
+  }
   
   console.log(numOfCards, maxNumOfCards);
 
@@ -450,6 +489,10 @@ function displayDesc(physicistInfo, name) {
 
 }
 
+function promptForConfirmation() {
+  const overlayContent = showOverlay();
+}
+
 function showOverlay() {
   const overlay = document.querySelector(".overlay");
   const overlayProperties = overlay.style;
@@ -552,8 +595,6 @@ function adjustToScreenSize(screenWidthPx) {
 
   }
 }
-
-
 
 function getTime(){
   let time = new Date(Date.now()).toTimeString().substring(0, 8);

@@ -216,6 +216,7 @@ body {
   align-content: center;
   text-align: center;
   z-index: 0;
+  /* background-image: url(AJourneyThroughPhysicsLogo.png); */
 }
 
 .footer {
