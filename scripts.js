@@ -26,7 +26,7 @@ import physicistObj from "./data/physicistDesc.js";
 
 let maxNumOfCards = 3;
 
-const startTime = getTime();
+let startTime = getTime();
 
 
 // Your final submission should have much more data than this, and
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const allCards = document.querySelector("#card-container").children;
 
   createCards(physicistObj, maxNumOfCards);
-  
+
   const windowWidth = window.innerWidth;
   adjustToScreenSize(windowWidth);
 
@@ -59,7 +59,7 @@ window.addEventListener("resize", (evt) => {
 // This function adds cards the page to display the data in the array
 function createCards(dataObj, amount, startIndex=0) {
   const cardContainer = document.getElementById("card-container");
-  const templateCard = document.querySelector(".card");
+  //const templateCard = document.querySelector(".card");
   cardContainer.innerHTML = "";
 
   // Grabs all the keys in the object and returns in array form
@@ -70,8 +70,8 @@ function createCards(dataObj, amount, startIndex=0) {
   document.querySelector(".numberOfCollected").textContent = amount;
 
 
-  //console.log(physicistNames);
-
+  
+  // Generate cards for amount times (generally stored in the maxNumOfCards variable)
   for (let i = 0; i < amount; i++) {
 
     // name of physicist
@@ -313,6 +313,7 @@ function deleteCard(card) {
   const cardContainer = document.getElementById("card-container");
   let numOfCards = cardContainer.children.length;
 
+  // This is all "logic" for the secret (it's just a bunch of annoying alerts)
   if (numOfCards < 2) {
     console.log("test");
 
@@ -345,8 +346,11 @@ function deleteCard(card) {
 
 
     if (finalDecision) {
-
+      toggleAddCardButton(true);
+      cardContainer.removeChild(card);
       secret();
+
+      return;
 
     }
     
@@ -365,10 +369,9 @@ function deleteCard(card) {
   }
 
 
-  // This addresses an odd issue where the deleteCard() function seems to be called twice
-  if (cardContainer.contains(card)) {
-    cardContainer.removeChild(card);
-  }
+  // Removes the card from the site
+  cardContainer.removeChild(card);
+
 
   console.log(card.physicist);
   const physicistBeingDeleted = physicistObj[card.physicist];
@@ -520,10 +523,6 @@ function displayDesc(physicistInfo, name) {
 
 }
 
-function promptForConfirmation() {
-  const overlayContent = showOverlay();
-}
-
 function showOverlay() {
   const overlay = document.querySelector(".overlay");
   const overlayProperties = overlay.style;
@@ -632,11 +631,32 @@ function getTime(){
   return(time);
 }
 
+// Secret for the site
+// After the user says yes to all four confirmations this replaces the background and brigns up a UI prompt to time travel
 function secret() {
+
+  changeBackgroundText("");
+
   let background = document.querySelector(".background");
 
   background.style.backgroundImage = "url(AJourneyThroughPhysicsLogo.png)";
 
-  changeBackgroundText("");
-  createCards(physicistObj, 3);
+  let secret = document.querySelector(".secret");
+
+  secret.style.opacity = 1;
+  secret.style.pointerEvents = "all";
+
+  let blackHoleButton = secret.querySelector(".blackHoleButton");
+
+  blackHoleButton.addEventListener("click", () => {
+
+    startTime = getTime();
+
+    createCards(physicistObj, 3);
+
+    background.style.backgroundImage = "";
+
+    secret.style.opacity = 0;
+    secret.style.pointerEvents = "none";
+  })
 }
