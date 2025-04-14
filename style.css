@@ -172,7 +172,9 @@ body {
 .deleteButton, .replaceButton {
   width: 100%;
   border: none;
+  cursor: pointer;
 }
+
 
 /* Add Card UI Element */
 .addCardContainer {
@@ -214,7 +216,6 @@ body {
   align-content: center;
   text-align: center;
   z-index: 0;
-  box-sizing:unset;
 }
 
 .footer {

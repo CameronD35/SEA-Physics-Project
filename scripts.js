@@ -33,6 +33,16 @@ const startTime = getTime();
 // you should use more than just an array of strings to store it all.
 const templateCard = document.querySelector(".card"); // Copy the template card
 
+// This calls the addCards() function when the page is first loaded
+document.addEventListener("DOMContentLoaded", () => {
+  createCards(physicistObj, 3);
+});
+
+window.addEventListener("resize", (evt) => {
+  const windowWidth = evt.target.innerWidth
+  adjustToScreenSize(windowWidth)
+})
+
 // This function adds cards the page to display the data in the array
 function createCards(dataObj, amount, startIndex=0) {
   const cardContainer = document.getElementById("card-container");
@@ -141,7 +151,7 @@ function editCardContent(card, newTitle, physicistInfo) {
   // adding a duplicate event listener to the card
   // once removes the event listener upon activation
   replaceButton.addEventListener("click", () => {
-    //console.log("I have been summoned!");
+    console.log("I have been summoned!");
 
     replaceCard(card, physicistObj);
 
@@ -183,11 +193,6 @@ function editCardContent(card, newTitle, physicistInfo) {
   card.addEventListener("mouseleave", toggleCardOptions);
 
 }
-
-// This calls the addCards() function when the page is first loaded
-document.addEventListener("DOMContentLoaded", () => {
-  createCards(physicistObj, 3);
-});
 
 
 function toggleCardOptions(evt) {
@@ -253,6 +258,10 @@ function replaceCard(oldCard, dataObj) {
     }
   }
 
+  let oldPhysicist = dataObj[oldCard.physicist];
+
+  oldPhysicist["Visible"] = "false";
+
   // Math.random() returns numbers from 0 to 1, so we have to multiply by the length of the object of physicists
   // Floor is to ensure we don't go above the indices of the object
   const randomNumber = Math.floor(Math.random() * physicistNames.length);
@@ -263,7 +272,9 @@ function replaceCard(oldCard, dataObj) {
   // Takes random name and grabs info from dataObj
   newPhysicist = dataObj[randomPhysicistName];
 
-  //console.log(newPhysicist);
+  //console.log(physicistNames, newPhysicist, randomPhysicistName, randomNumber);
+
+  const cardContainer = document.getElementById("card-container");
   
   // Effectively erases all the info on the old card and replaces it with the new physicist
   editCardContent(oldCard, randomPhysicistName, newPhysicist);
@@ -273,20 +284,35 @@ function replaceCard(oldCard, dataObj) {
 function deleteCard(card) {
 
   const cardContainer = document.getElementById("card-container");
-  const numOfCards = cardContainer.children.length;
+  let numOfCards = cardContainer.children.length;
 
-  if (numOfCards < 2) {
-    console.log("You've broken physics!!!!");
-    return;
-  }
+  // if (numOfCards < 2) {
+  //   console.log("You've broken physics!!!!");
+  //   return;
+  // }
   
-  toggleAddCardButton(false);
+  console.log(numOfCards, maxNumOfCards);
+
+  if (numOfCards <= maxNumOfCards) {
+
+    toggleAddCardButton(false);
+
+  } else {
+
+    toggleAddCardButton(true);
+
+  }
 
 
   // This addresses an odd issue where the deleteCard() function seems to be called twice
   if (cardContainer.contains(card)) {
     cardContainer.removeChild(card);
   }
+
+  console.log(card.physicist);
+  const physicistBeingDeleted = physicistObj[card.physicist];
+
+  physicistBeingDeleted["Visible"] = "false";
 
 
 
@@ -314,21 +340,24 @@ function addCard(evt) {
   // The object associated with each physicist's name
   const physicistInfo = physicistObj[physicist];
 
-  //console.log(physicistInfo);
-
   const nextCard = templateCard.cloneNode(true);
   nextCard.id = `card${numOfCards}`;
   editCardContent(nextCard, physicist, physicistInfo); // Edit title and image
   cardContainer.appendChild(nextCard); // Add new card to the container
   
-  replaceCard(nextCard, physicistObj);
+
+  // Done to prevent newly added cards from being duplicates
+  replaceCard(nextCard, physicistObj); 
+
+  const replacementPhysicist = physicistObj[nextCard.physicist];
+
+  //replacementPhysicist["Visible"] = "true"
 
   // The number of cards prior to addition will also be the number appended to the new card
   // since the card numbers start from 0 (whereas length starts from 1)
   //console.log(cardContainer);
-  console.log(physicistObj);
 
-  if (++numOfCards >= 3) {
+  if (++numOfCards >= maxNumOfCards) {
     toggleAddCardButton(true);
   }
 
@@ -448,7 +477,7 @@ function hideOverlay(evt) {
 
   const containsOverlay = target.contains(overlay);
 
-  console.log(target, containsOverlay);
+  //console.log(target, containsOverlay);
 
   if (containsOverlay) {
     overlayProperties.transform = "scaleX(0) scaleY(0)";
@@ -458,10 +487,73 @@ function hideOverlay(evt) {
   }
 }
 
-function removeLastCard() {
-  titles.pop(); // Remove last item in titles array
-  showCards(); // Call showCards again to refresh
+function adjustToScreenSize(screenWidthPx) {
+
+  const hero = document.querySelector(".hero");
+  const currentSizing = hero.getAttribute("data-sizing");
+  const allCards = document.querySelector("#card-container").children;
+  const currentNumOfCards = allCards.length;
+
+  const normalSizingMinPx = 1000;
+  const mediumSizingMinPx = 650;
+
+  let newSizing;
+
+  if (screenWidthPx >= normalSizingMinPx) {
+    
+    maxNumOfCards = 3;
+    newSizing = "normal";
+
+  } else if (screenWidthPx >= mediumSizingMinPx) {
+    
+    maxNumOfCards = 2;
+    newSizing = "reduced";
+
+  } else {
+
+    maxNumOfCards = 1;
+    newSizing = "greatlyReduced";
+
+  }
+
+  if (currentSizing == newSizing) {
+
+    return;
+
+  } else {
+
+    hero.setAttribute("data-sizing", newSizing);
+    console.log(`Size now ${newSizing}. Max Cards: ${maxNumOfCards}, Current Cards: ${currentNumOfCards}`);
+    let i = currentNumOfCards;
+
+    if (currentNumOfCards < maxNumOfCards) {
+      
+      toggleAddCardButton(false);
+
+    } else {
+
+      toggleAddCardButton(true);
+
+    }
+
+    while (i > maxNumOfCards) {
+
+      const currentLastCard = allCards[i - 1];
+
+      console.log(currentLastCard)
+
+      deleteCard(currentLastCard);
+
+
+      
+      i--;
+
+    }
+
+  }
 }
+
+
 
 function getTime(){
   let time = new Date(Date.now()).toTimeString().substring(0, 8);
