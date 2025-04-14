@@ -199,6 +199,7 @@ body {
   font-size: 18px;
   padding: 0 10px 0 10px;
   transform: scaleX(0) scaleY(0);
+  cursor: pointer;
 }
 
 /* Physicist name background */

@@ -151,31 +151,53 @@ function editCardContent(card, newTitle, physicistInfo) {
   // The third argument, "{once: true}", prevents the editCardContent() function from 
   // adding a duplicate event listener to the card
   // once removes the event listener upon activation
-  replaceButton.addEventListener("click", () => {
-    console.log("I have been summoned!");
+  const cardhasReplaceFn = card.replaceFn;
 
-    replaceCard(card, physicistObj);
+  if (!cardhasReplaceFn) {
 
-    physicistInfo["Visible"] = "false";
+    replaceButton.addEventListener("click", () => {
+      console.log("I have been summoned!");
+  
+      replaceCard(card, physicistObj);
+  
+      physicistInfo["Visible"] = "false";
+  
+      //console.log(physicistObj);
+    });
 
-    //console.log(physicistObj);
+    card.replaceFn = true;
 
-  }, {once: true});
+  }
+  // replaceButton.addEventListener("click", () => {
+  //   console.log("I have been summoned!");
+
+  //   replaceCard(card, physicistObj);
+
+  //   physicistInfo["Visible"] = "false";
+
+  //   //console.log(physicistObj);
+
+  // }, {once: true});
 
   const deleteButton = card.querySelector(".deleteButton");
-  console.log(`Added delete fn to ${card}`);
-  // comments
+  const cardHasDeleteFn = card.deleteFn;
+
+  if (!cardHasDeleteFn) {
+
+    deleteButton.addEventListener("click", () => {
+      console.log("I have been summoned!");
   
-  deleteButton.addEventListener("click", () => {
-    console.log("I have been summoned!");
+      deleteCard(card);
+  
+      physicistInfo["Visible"] = "false";
+  
+      //console.log(physicistObj);
+  
+    });
 
-    deleteCard(card);
+    card.deleteFn = true;
 
-    physicistInfo["Visible"] = "false";
-
-    //console.log(physicistObj);
-
-  }, {once: true});
+  }
 
   const cardContent = card.querySelector(".card-content");
 
