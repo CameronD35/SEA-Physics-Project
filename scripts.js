@@ -678,6 +678,7 @@ function secret() {
 
     }
 
+    // reset number of collected cards
     let numberOfCollectedDOM = document.querySelector(".numberOfCollected")
     
     // Gathers number of currently collected cards
