@@ -225,8 +225,16 @@ body {
   bottom: 0;
   width: 100%;
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
   background-color: unset;
+}
+
+/* Hint */
+.hint {
+  color: var(--main-color);
+  margin-left: 20px;
+  font-style: italic;
+  opacity: 0.7;
 }
 
 /* Collected Cards UI element */
