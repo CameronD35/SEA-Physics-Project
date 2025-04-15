@@ -662,14 +662,37 @@ function secret() {
 
     updateTime();
 
-    createCards(physicistObj, 3);
+    const physicistNames = Object.keys(physicistObj);
 
+    // reset the status of collected and visible cards
+    for (let i = 0; i < physicistNames.length; i++) {
+
+      const physicistName = physicistNames[i];
+      const physicist = physicistObj[physicistName];
+
+
+      console.log(physicist);
+        
+      physicist["Collected"] = "false";
+      physicist["Visible"] = "false";
+
+    }
+
+    let numberOfCollectedDOM = document.querySelector(".numberOfCollected")
+    
+    // Gathers number of currently collected cards
+    numberOfCollectedDOM.setAttribute("data-collected", 0);
+    
+    createCards(physicistObj, maxNumOfCards);
+    console.log(maxNumOfCards);
     // remove logo from background
     background.style.backgroundImage = "";
 
     // hide the secret prompt and remove its interactables
     secret.style.opacity = 0;
     secret.style.pointerEvents = "none";
+
+    
 
   });
 
