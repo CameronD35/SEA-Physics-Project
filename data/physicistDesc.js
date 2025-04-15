@@ -36,7 +36,7 @@ let physicistObj = {
         "Image": "https://cdn11.bigcommerce.com/s-yzgoj/images/stencil/1280x1280/products/1566982/4568435/apieli2xs__09946.1626702298.jpg?c=2",
         "Collected": "false",
         "Visible": "false",
-        "Description": "The founder of the Principle of Least Action, Pierre Louis de Maupertuis, was not welcomed warmly by many physicists at the time. Many argued that his equation, S_0 = mvs, was random and nonsensical. However, this would later be completely opposite, as it would later unify the various branches of physics. It's implication would reveal the nature of light, classical mechanics, and would extend into quantum mechanics."
+        "Description": "The founder of the Principle of Least Action, Pierre Louis de Maupertuis, was not welcomed warmly by many physicists at the time. Many argued that his equation, S_0 = mvs, was random and nonsensical. However, this would later be completely opposite, as it would later unify the various branches of physics. Its implication would reveal the nature of light, classical mechanics, and would extend into quantum mechanics."
     },
 
     "James Clark Maxwell": {
@@ -47,6 +47,26 @@ let physicistObj = {
         "Collected": "false",
         "Visible": "false",
         "Description": "James Clark Maxwell, the originator of the concept of electromagnetic radiation, is renowned for making contributions on the scale of Isaac Newton and Albert Einstein; this is no easy feat. Maxwell formed the basis of what would become Max Planck's quantum hypothesis, a key part in the theoretical development of the microscopic world."
+    },
+
+    "Michael Faraday": {
+        "Lifespan": "9/22/1791 - 8/25/1867",
+        "Popular Contribution": "Invention of the Electric Motor",
+        "Papers Published": "500+",
+        "Image": "https://personajeshistoricos.com/wp-content/uploads/2018/04/michael-faraday-9.jpg",
+        "Collected": "false",
+        "Visible": "false",
+        "Description": "While being partially known for his efforts in chemistry, Michael Faraday is considered one of the founders of our modern idea of electromagnetism. For instance, Faraday was the first to propose that light traveled through the vibration of electric and magnetic lines. These lines were also proposed by Faraday. Ultimately, James Clark Maxwell was able to quantitatively, rather than qualitatively, represent this phenomenon."
+    },
+
+    "Galileo Galilei": {
+        "Lifespan": "2/15/1564 - 1/8/1642",
+        "Popular Contribution": "Development of the Telescope",
+        "Papers Published": "4",
+        "Image": "https://www.thefamouspeople.com/profiles/images/galileo-galilei-25.jpg",
+        "Collected": "false",
+        "Visible": "false",
+        "Description": "Known for his development of telescopes, Galileo Galilei worked with Johannes Kepler by producing a telescope with twenty times magnification. Together, they used the instrument to support the Copernican view that the Earth is not at the center of the solar system (heliocentrism). However, due to the influence of the Catholic Church, Galileo was convicted of heresy when he published a paper in 1634 that showed heavy bias towards heliocentrism."
     }
 }
 

@@ -1,65 +1,45 @@
-/**
- * Data Catalog Project Starter Code - SEA Stage 2
- *
- * This file is where you should be doing most of your work. You should
- * also make changes to the HTML and CSS files, but we want you to prioritize
- * demonstrating your understanding of data structures, and you'll do that
- * with the JavaScript code you write in this file.
- *
- * The comments in this file are only to help you learn how the starter code
- * works. The instructions for the project are in the README. That said, here
- * are the three things you should do first to learn about the starter code:
- * - 1 - Change something small in index.html or style.css, then reload your
- *    browser and make sure you can see that change.
- * - 2 - On your browser, right click anywhere on the page and select
- *    "Inspect" to open the browser developer tools. Then, go to the "console"
- *    tab in the new window that opened up. This console is where you will see
- *    JavaScript errors and logs, which is extremely helpful for debugging.
- *    (These instructions assume you're using Chrome, opening developer tools
- *    may be different on other browsers. We suggest using Chrome.)
- * - 3 - Add another string to the titles array a few lines down. Reload your
- *    browser and observe what happens. You should see a fourth "card" appear
- *    with the string you added to the array, but a broken image.
- *
- */
 import physicistObj from "./data/physicistDesc.js";
 
 let maxNumOfCards = 3;
 
-let startTime = getTime();
-
-
-// Your final submission should have much more data than this, and
-// you should use more than just an array of strings to store it all.
-const templateCard = document.querySelector(".card"); // Copy the template card
+// Copy the template card and store it globally so it may be accessed at any point (as opposed to have it in the DOM)
+const templateCard = document.querySelector(".card");
 
 // This calls the addCards() function when the page is first loaded
 document.addEventListener("DOMContentLoaded", () => {
 
+  // gets all the card DOM elements
   const allCards = document.querySelector("#card-container").children;
 
+  // creates initial set of cards
   createCards(physicistObj, maxNumOfCards);
 
+  // adjusts site to screen size at load to prevent cutoffs
   const windowWidth = window.innerWidth;
   adjustToScreenSize(windowWidth);
 
   const currentNumOfCards = allCards.length;
   console.log(currentNumOfCards, allCards);
 
-  let blackHoleTime = document.querySelector(".blackHoleTime");
-  blackHoleTime.textContent = startTime;
+  // stores the time the site was loaded for THE SECRET
+  updateTime();
   
 });
 
+// listens for resize and checks to see if a new sizing limit was reached
 window.addEventListener("resize", (evt) => {
+
   const windowWidth = evt.target.innerWidth;
   adjustToScreenSize(windowWidth);
-})
+
+});
 
 // This function adds cards the page to display the data in the array
 function createCards(dataObj, amount, startIndex=0) {
+
   const cardContainer = document.getElementById("card-container");
-  //const templateCard = document.querySelector(".card");
+
+  // reset the DOM since we already have a copy of template card
   cardContainer.innerHTML = "";
 
   // Grabs all the keys in the object and returns in array form
@@ -68,8 +48,6 @@ function createCards(dataObj, amount, startIndex=0) {
   // Update the UI element in the bottom right corner with the proper amount of physicists in the data object
   document.querySelector(".totalNumberOfCards").textContent = physicistNames.length;
   document.querySelector(".numberOfCollected").textContent = amount;
-
-
   
   // Generate cards for amount times (generally stored in the maxNumOfCards variable)
   for (let i = 0; i < amount; i++) {
@@ -80,21 +58,20 @@ function createCards(dataObj, amount, startIndex=0) {
     // The object associated with each physicist's name
     const physicistInfo = dataObj[physicist];
 
+    // clone the template card
     const nextCard = templateCard.cloneNode(true);
     nextCard.id = `card${i + startIndex}`;
 
-    //console.log(physicistInfo)
-    editCardContent(nextCard, physicist, physicistInfo); // Edit title and image
-    cardContainer.appendChild(nextCard); // Add new card to the container
-    //replaceCard(nextCard, physicistObj)
+    // Edit title and image
+    editCardContent(nextCard, physicist, physicistInfo);
+
+    // Add new card to the container
+    cardContainer.appendChild(nextCard);
   }
 }
 
+function editCardContent(card, newName, physicistInfo) {
 
-
-function editCardContent(card, newTitle, physicistInfo) {
-
-  //console.log(physicistInfo);
 
   // Change from display: none to display: flex
   card.style.display = "flex";
@@ -102,12 +79,10 @@ function editCardContent(card, newTitle, physicistInfo) {
   // Indicate that the card is currently being displayed
   physicistInfo["Visible"] = "true";
 
-  //console.log(card);
-
   // Name of physicist (which is the header)
-  card.physicist = newTitle;
+  card.physicist = newName;
   const cardHeader = card.querySelector("h2");
-  cardHeader.textContent = newTitle;
+  cardHeader.textContent = newName;
 
 
   // Lifespan of physicist (birth to death)
@@ -119,26 +94,24 @@ function editCardContent(card, newTitle, physicistInfo) {
   // Most popular piece of work
   const popContributionText = card.querySelector(".popContribution");
   const popularContribution = physicistInfo["Popular Contribution"];
-
   popContributionText.textContent = popularContribution;
 
 
   // Number of papers published throughout lifttime
   const papersPublishedText = card.querySelector(".papersPublished");
   const papersPublished = physicistInfo["Papers Published"];
-
   papersPublishedText.textContent = papersPublished;
   
 
-  // Picture of physicist
+  // Picture of physicist along with an alt description
   const image = physicistInfo["Image"];
   const cardImage = card.querySelector("img");
-
   cardImage.src = image;
-  cardImage.alt = newTitle + " Image";
+  cardImage.alt = "Image of " + newName;
 
-  // Logic for updating the amount of collected cards
+  // Stores whether the card has been collecting according to the physicist's Collected property
   const isCollected = physicistInfo["Collected"];
+
 
   if (isCollected == "false") {
 
@@ -166,21 +139,21 @@ function editCardContent(card, newTitle, physicistInfo) {
 
   if (!cardhasReplaceFn) {
 
+    // add click event listener
     replaceButton.addEventListener("click", () => {
-      //console.log("I have been summoned!");
-  
+      
+      // replace current card and generate new one with random physicist
       replaceCard(card, physicistObj);
-  
+      
+      // Since we are removing the current physicist form the page, we want to ensure it is marked as invisible
       physicistInfo["Visible"] = "false";
   
-      //console.log(physicistObj);
     });
 
     card.replaceFn = true;
 
   }
   
-
   // Event listener for delete card button
   // Only adds the delete function if it does not already exist on the card
   const deleteButton = card.querySelector(".deleteButton");
@@ -188,14 +161,16 @@ function editCardContent(card, newTitle, physicistInfo) {
 
   if (!cardHasDeleteFn) {
 
+    // add click event listener
     deleteButton.addEventListener("click", () => {
-      //console.log("I have been summoned!");
-  
+      
+      // remove card from DOM
       deleteCard(card);
-  
+      
+      // Since we are removing the current physicist form the page, we want to ensure it is marked as invisible
       physicistInfo["Visible"] = "false";
   
-      //console.log(physicistObj);
+
   
     });
 
@@ -205,49 +180,58 @@ function editCardContent(card, newTitle, physicistInfo) {
 
   const cardContent = card.querySelector(".card-content");
 
+  // displays a pop-up and mroe info when the user clicks inside of the physicist's card
   cardContent.addEventListener("click", () => {
-    console.log("clicked in card");
 
-    displayDesc(physicistInfo, newTitle);
-  })
+    displayDesc(physicistInfo, newName);
+
+  });
 
 
 
   // This shows the delete/replace options on each card on hover
   card.addEventListener("mouseenter", toggleCardOptions);
 
-  // This hides the delete/replace options on each card on hover
+  // This hides the delete/replace options on each card on un-hover
   card.addEventListener("mouseleave", toggleCardOptions);
 
 }
 
-
 function toggleCardOptions(evt) {
 
-  //console.log(evt);
-
+  // type of event (such as "click")
   const eventType = evt.type;
 
   const card = evt.target;
-  //console.log(card);
 
   const cardContent = card.querySelector(".card-content");
 
   const dropdown = card.querySelector(".cardDropdown");
 
+  // essentially, if the mouse enters the card we reveal the options, otheriwse (such as in "mouseleave") we hide the options
+  // data-toggle is an additional html attribute to prevent the use of more global variables and other complexities
   if (eventType == "mouseenter") {
+
     dropdown.setAttribute("data-toggle", "on");
     dropdown.style.transform = "scaleY(1)";
-
+    
+    // change border-radius for better design
     cardContent.style.borderRadius = "5px 5px 0 0";
+
+    // set background text to currently focused physicist
     changeBackgroundText(card.physicist);
 
   } else {
+
     dropdown.setAttribute("data-toggle", "off");
     dropdown.style.transform = "scaleY(0)";
 
+    // revert border-radius
     cardContent.style.borderRadius = "5px";
+
+    // reset background text
     changeBackgroundText("");
+
   }
 
 }
@@ -258,7 +242,6 @@ function replaceCard(oldCard, dataObj) {
   let newPhysicist;
 
   let physicistNames = Object.keys(dataObj);
-  // console.log(physicistNames);
 
   // Goes through and filters the array to see what physicists already have a card being displayed
   // In order to prevent iterating through all the physicists, we cannot increment when we find a "visible" physicist
@@ -270,12 +253,12 @@ function replaceCard(oldCard, dataObj) {
 
     const physicistInfo = dataObj[name];
 
-    //console.log(i);
-
     if (physicistInfo["Visible"] == "true") {
 
+      // get index of "visible" physicist
       const physicistIndex = physicistNames.indexOf(name);
 
+      // remove physicist from the array of options
       physicistNames.splice(physicistIndex, 1);
 
     } else {
@@ -285,8 +268,10 @@ function replaceCard(oldCard, dataObj) {
     }
   }
 
+  // grab the old physicist (the one being replaced) using the .physicist attribute assigned to all cards
   let oldPhysicist = dataObj[oldCard.physicist];
 
+  // indicate invisibility
   oldPhysicist["Visible"] = "false";
 
   // Math.random() returns numbers from 0 to 1, so we have to multiply by the length of the object of physicists
@@ -315,6 +300,7 @@ function deleteCard(card) {
 
   // This is all "logic" for the secret (it's just a bunch of annoying alerts)
   if (numOfCards < 2) {
+
     console.log("test");
 
     let finalDecision = false;
@@ -332,19 +318,27 @@ function deleteCard(card) {
 
           const fourthDecision = confirm("Just kidding, but for real, this is your last chance.");
 
-          finalDecision = fourthDecision
+          finalDecision = fourthDecision;
 
         } else {
+
           return;
+
         }
+
       } else {
+
         return;
+
       }
+
     } else {
+
       return;
+
     }
 
-
+    // If the final decision is true, queue THE BLACK HOLE
     if (finalDecision) {
       toggleAddCardButton(true);
       cardContainer.removeChild(card);
@@ -355,13 +349,13 @@ function deleteCard(card) {
     } else {
 
       return;
-      
+
     }
     
   }
-  
-  console.log(numOfCards, maxNumOfCards);
 
+  // If after deletion there are less cards than the max available (default is 3 but is less for smaller screen sizes), reveals "Add Card" button
+  // Otherwise, it will hide it if it is visible
   if (numOfCards <= maxNumOfCards) {
 
     toggleAddCardButton(false);
@@ -372,20 +366,15 @@ function deleteCard(card) {
 
   }
 
-
   // Removes the card from the site
   cardContainer.removeChild(card);
 
 
-  console.log(card.physicist);
+  // grab the physicist being deleting so we can indicate they are invisible
   const physicistBeingDeleted = physicistObj[card.physicist];
 
   physicistBeingDeleted["Visible"] = "false";
 
-
-
-  //console.log(numOfCards);
-  //console.log(cardID);
 }
 
 function addCard(evt) {
@@ -398,21 +387,21 @@ function addCard(evt) {
   // Grabs all the keys in the object and returns in array form
   const physicistNames = Object.keys(physicistObj);
 
-
-  //console.log(physicistNames);
-
-
   // name of physicist
   const physicist = physicistNames[numOfCards];
 
   // The object associated with each physicist's name
   const physicistInfo = physicistObj[physicist];
 
+  // create new clonw of template and provide it with a unique id
   const nextCard = templateCard.cloneNode(true);
   nextCard.id = `card${numOfCards}`;
-  editCardContent(nextCard, physicist, physicistInfo); // Edit title and image
-  cardContainer.appendChild(nextCard); // Add new card to the container
-  
+
+  // Edit title and image
+  editCardContent(nextCard, physicist, physicistInfo);
+
+  // Add new card to the container
+  cardContainer.appendChild(nextCard);
 
   // Done to prevent newly added cards from being duplicates
   replaceCard(nextCard, physicistObj); 
@@ -421,12 +410,13 @@ function addCard(evt) {
 
   //replacementPhysicist["Visible"] = "true"
 
+  // Checks to see if we have reached the max number of cards and removes the "Add Card" button if so
   // The number of cards prior to addition will also be the number appended to the new card
   // since the card numbers start from 0 (whereas length starts from 1)
-  //console.log(cardContainer);
-
   if (++numOfCards >= maxNumOfCards) {
+
     toggleAddCardButton(true);
+
   }
 
 }
@@ -438,7 +428,7 @@ function toggleAddCardButton(hideButton) {
   const isVisible = addCardButton.getAttribute("data-visible");
 
   // To prevent from hiding the button and then just revealing it afterwards (since it's visibility may already be "true")
-  // We return out of the function at the end if hideButton == true
+  // We terminate the function at the end if hideButton == true
   if (hideButton) {
 
     addCardButton.style.transform = "scaleX(0) scaleY(0)";
@@ -459,43 +449,44 @@ function toggleAddCardButton(hideButton) {
 
   }
 
-  console.log("is this working tho?");
-
 }
 
 function changeBackgroundText(newName) {
 
   const backgroundText = document.querySelector(".backgroundText");
 
+  // in order to account for physicists with multiple names, we replace spaces with html break tags for a smoother design
   const formattedName = newName.replace(" ", "<br>");
 
-  // Animation
+  // animation that adds a minimal fade for smoother appearance
   backgroundText.style.opacity = 0;
-
+  
   setTimeout(() => {
     backgroundText.innerHTML = formattedName;
-  }, 50)
+  }, 50);
 
   setTimeout(() => {
     backgroundText.style.opacity = 1;
-  }, 50)
+  }, 50);
 }
 
 function displayDesc(physicistInfo, name) {
+
+  // showOverlay returns the area in which the content will go
   const overlayContent = showOverlay();
 
   const imgSection = overlayContent.querySelector(".imgSection");
 
+  // name of physicist
   const title = imgSection.querySelector(".physicistDescTitle");
-
   title.textContent = name;
 
+  // image of physicist
   const img = imgSection.querySelector(".physicistDescImg");
-
   img.src = physicistInfo["Image"];
 
+  // image of physicist, but it is blurred and applied to the overlay background
   const backgroundImg = imgSection.querySelector(".backgroundImg");
-
   backgroundImg.src = physicistInfo["Image"];
 
 
@@ -506,62 +497,67 @@ function displayDesc(physicistInfo, name) {
   const lifespan = physicistInfo["Lifespan"];
   lifespanText.textContent = lifespan;
 
-
   // Most popular piece of work
   const popContributionText = infoSection.querySelector(".descPopContribution");
   const popularContribution = physicistInfo["Popular Contribution"];
-
   popContributionText.textContent = popularContribution;
-
 
   // Number of papers published throughout lifttime
   const papersPublishedText = infoSection.querySelector(".descPapersPublished");
   const papersPublished = physicistInfo["Papers Published"];
-
   papersPublishedText.textContent = papersPublished;
-
+  
+  // brief description of the physicist
   const descriptionSection = infoSection.querySelector(".physicistDesc");
   const description = physicistInfo["Description"];
-
   descriptionSection.textContent = description;
 
 }
 
 function showOverlay() {
+
   const overlay = document.querySelector(".overlay");
   const overlayProperties = overlay.style;
 
+  // expand overlay and allow for it to be clicked on
   overlayProperties.transform = "scaleX(1) scaleY(1)";
   overlayProperties.pointerEvents = "all";
 
   const heroProperties = document.querySelector(".hero").style;
 
+  // blur the main content to direct focus towards
   heroProperties.filter = "blur(4px)";
 
+  // if anything outside of the overlay content, we hide the overlay
   window.addEventListener("click", hideOverlay);
 
-  return overlay.querySelector(".overlayContent")
+  return overlay.querySelector(".overlayContent");
+
 }
 
 function hideOverlay(evt) {
+
   const overlay = document.querySelector(".overlay");
   const overlayProperties = overlay.style;
 
   const heroProperties = document.querySelector(".hero").style;
 
-
+  // grab the object that was clicked
   const target = evt.target;
 
+  // check if the object clicked is a descendant of the overlay
   const containsOverlay = target.contains(overlay);
 
-  //console.log(target, containsOverlay);
-
+  // reduce overlay and revoke its pointer events along with the blur
   if (containsOverlay) {
+
     overlayProperties.transform = "scaleX(0) scaleY(0)";
     overlayProperties.pointerEvents = "none";
     
     heroProperties.filter = "";
+
   }
+
 }
 
 function adjustToScreenSize(screenWidthPx) {
@@ -576,6 +572,7 @@ function adjustToScreenSize(screenWidthPx) {
 
   let newSizing;
 
+  // normal sizing is the defualt, unless the window is smaller
   if (screenWidthPx >= normalSizingMinPx) {
     
     maxNumOfCards = 3;
@@ -593,6 +590,7 @@ function adjustToScreenSize(screenWidthPx) {
 
   }
 
+  // if the cuurent sizing and the newly calculated one are the same, nothing is done
   if (currentSizing == newSizing) {
 
     return;
@@ -603,25 +601,25 @@ function adjustToScreenSize(screenWidthPx) {
     console.log(`Size now ${newSizing}. Max Cards: ${maxNumOfCards}, Current Cards: ${currentNumOfCards}`);
     let i = currentNumOfCards;
 
+    // hide the "Add Card" button if the cards on the page exceed or equal the max
     if (currentNumOfCards < maxNumOfCards) {
-      console.log("test");
+      
       toggleAddCardButton(false);
 
     } else {
-      console.log("test2");
+
       toggleAddCardButton(true);
 
     }
 
+    // remove any cards above the limit of max cards
     while (i > maxNumOfCards) {
 
       const currentLastCard = allCards[i - 1];
 
-      console.log(currentLastCard)
+      console.log(currentLastCard);
 
       deleteCard(currentLastCard);
-
-
       
       i--;
 
@@ -630,37 +628,49 @@ function adjustToScreenSize(screenWidthPx) {
   }
 }
 
-function getTime(){
+function updateTime(){
+  // gets current time, converts to readable time string (hh:mm:ss) by chopping off the extra info (such as the date)
   let time = new Date(Date.now()).toTimeString().substring(0, 8);
-  return(time);
+
+  // stores the time the site was loaded for THE SECRET
+  let blackHoleTime = document.querySelector(".blackHoleTime");
+  blackHoleTime.textContent = time;
 }
 
 // Secret for the site
 // After the user says yes to all four confirmations this replaces the background and brigns up a UI prompt to time travel
 function secret() {
 
+  // reset background text
   changeBackgroundText("");
 
   let background = document.querySelector(".background");
 
+  // add site logo to the backgroudn
   background.style.backgroundImage = "url(AJourneyThroughPhysicsLogo.png)";
 
   let secret = document.querySelector(".secret");
 
+  // show secret prompt and along user interaction with it
   secret.style.opacity = 1;
   secret.style.pointerEvents = "all";
 
   let blackHoleButton = secret.querySelector(".blackHoleButton");
 
+  // Upon clicking the button, the user will be sent back in time to when they first loaded the site
   blackHoleButton.addEventListener("click", () => {
 
-    startTime = getTime();
+    updateTime();
 
     createCards(physicistObj, 3);
 
+    // remove logo from background
     background.style.backgroundImage = "";
 
+    // hide the secret prompt and remove its interactables
     secret.style.opacity = 0;
     secret.style.pointerEvents = "none";
-  })
+
+  });
+
 }
