@@ -284,7 +284,7 @@ function replaceCard(oldCard, dataObj) {
   // Takes random name and grabs info from dataObj
   newPhysicist = dataObj[randomPhysicistName];
 
-  //console.log(physicistNames, newPhysicist, randomPhysicistName, randomNumber);
+  changeBackgroundText(randomPhysicistName);
 
   const cardContainer = document.getElementById("card-container");
   
@@ -374,6 +374,8 @@ function deleteCard(card) {
   const physicistBeingDeleted = physicistObj[card.physicist];
 
   physicistBeingDeleted["Visible"] = "false";
+
+  changeBackgroundText("");
 
 }
 
